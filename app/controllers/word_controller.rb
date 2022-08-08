@@ -5,9 +5,11 @@ class WordController < ApplicationController
  def create
   @user=User.new
   @user.word=params[:word]
-  @user.save
   response = RestClient.get "https://api.dictionaryapi.dev/api/v2/entries/en/#{@user.word}"
-  @user.meaning=response.body[:definition]
+  
+  hash=JSON.parse(response.body)
+  @user.meaning= hash["word"]
+  @user.save
   
   end
   
